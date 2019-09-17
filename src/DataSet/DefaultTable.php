@@ -10,8 +10,6 @@
 
 namespace PHPUnit\DbUnit\DataSet;
 
-use PHPUnit\DbUnit\InvalidArgumentException;
-
 /**
  * Provides default table functionality.
  */

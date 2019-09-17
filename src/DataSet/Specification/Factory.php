@@ -10,8 +10,6 @@
 
 namespace PHPUnit\DbUnit\DataSet\Specification;
 
-use PHPUnit\DbUnit\RuntimeException;
-
 /**
  * Creates the appropriate DataSet Spec based on a given type.
  */

@@ -10,8 +10,6 @@
 
 namespace PHPUnit\DbUnit\DataSet;
 
-use PHPUnit\DbUnit\InvalidArgumentException;
-
 /**
  * Implements the basic functionality of data sets using a PHP array.
  */

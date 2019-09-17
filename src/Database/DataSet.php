@@ -13,8 +13,6 @@ namespace PHPUnit\DbUnit\Database;
 use PHPUnit\DbUnit\DataSet\AbstractDataSet;
 use PHPUnit\DbUnit\DataSet\DefaultTableMetadata;
 use PHPUnit\DbUnit\DataSet\ITableMetadata;
-use PHPUnit\DbUnit\InvalidArgumentException;
-use PHPUnit\DbUnit\RuntimeException;
 
 /**
  * Provides access to a database instance as a data set.

@@ -10,8 +10,6 @@
 
 namespace PHPUnit\DbUnit\DataSet;
 
-use PHPUnit\DbUnit\RuntimeException;
-
 /**
  * The default implementation of a data set.
  */

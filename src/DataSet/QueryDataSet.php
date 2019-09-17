@@ -13,7 +13,6 @@ namespace PHPUnit\DbUnit\DataSet;
 use PHPUnit\DbUnit\Database\Connection;
 use PHPUnit\DbUnit\Database\Table;
 use PHPUnit\DbUnit\Database\TableIterator;
-use PHPUnit\DbUnit\InvalidArgumentException;
 
 /**
  * Provides access to a database instance as a data set.

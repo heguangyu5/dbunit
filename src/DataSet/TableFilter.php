@@ -10,8 +10,6 @@
 
 namespace PHPUnit\DbUnit\DataSet;
 
-use PHPUnit\DbUnit\InvalidArgumentException;
-
 /**
  * A table decorator that allows filtering out table columns from results.
  */

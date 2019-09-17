@@ -11,7 +11,6 @@
 namespace PHPUnit\DbUnit\Constraint;
 
 use PHPUnit\DbUnit\DataSet\IDataSet;
-use PHPUnit\DbUnit\InvalidArgumentException;
 use PHPUnit\Framework\Constraint\Constraint;
 
 /**

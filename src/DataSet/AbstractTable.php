@@ -10,7 +10,6 @@
 
 namespace PHPUnit\DbUnit\DataSet;
 
-use PHPUnit\DbUnit\InvalidArgumentException;
 use SimpleXMLElement;
 
 /**

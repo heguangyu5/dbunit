@@ -11,7 +11,6 @@
 namespace PHPUnit\DbUnit\Database\Metadata;
 
 use PDO;
-use PHPUnit\DbUnit\RuntimeException;
 use ReflectionClass;
 
 /**

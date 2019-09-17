@@ -11,7 +11,6 @@
 namespace PHPUnit\DbUnit\Operation;
 
 use PHPUnit\DbUnit\DataSet\ITable;
-use PHPUnit\DbUnit\RuntimeException;
 
 /**
  * Thrown for exceptions encountered with database operations. Provides
