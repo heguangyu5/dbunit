@@ -54,7 +54,7 @@ class CompositeDataSet extends AbstractDataSet
                 $table = $this->getTable($tableName);
 
                 if (!$table->getTableMetaData()->matches($other->getTableMetaData())) {
-                    throw new InvalidArgumentException("There is already a table named $tableName with different table definition");
+                    throw new \InvalidArgumentException("There is already a table named $tableName with different table definition");
                 }
 
                 $table->addTableRows($dataSet->getTable($tableName));
