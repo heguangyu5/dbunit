@@ -216,42 +216,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Creates a new FlatXmlDataSet with the given $xmlFile. (absolute path.)
-     *
-     * @param string $xmlFile
-     *
-     * @return FlatXmlDataSet
-     */
-    protected function createFlatXMLDataSet($xmlFile)
-    {
-        return new FlatXmlDataSet($xmlFile);
-    }
-
-    /**
-     * Creates a new XMLDataSet with the given $xmlFile. (absolute path.)
-     *
-     * @param string $xmlFile
-     *
-     * @return XmlDataSet
-     */
-    protected function createXMLDataSet($xmlFile)
-    {
-        return new XmlDataSet($xmlFile);
-    }
-
-    /**
-     * Create a a new MysqlXmlDataSet with the given $xmlFile. (absolute path.)
-     *
-     * @param string $xmlFile
-     *
-     * @return MysqlXmlDataSet
-     */
-    protected function createMySQLXMLDataSet($xmlFile)
-    {
-        return new MysqlXmlDataSet($xmlFile);
-    }
-
-    /**
      * Returns an operation factory instance that can be used to instantiate
      * new operations.
      *
