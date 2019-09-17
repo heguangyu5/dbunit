@@ -3,6 +3,7 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true"
+         stopOnFailure="true"
          cacheResult="false">
     <testsuite name="DbUnit">
         <directory suffix="Test.php">tests/Constraint</directory>

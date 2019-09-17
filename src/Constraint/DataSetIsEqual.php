@@ -64,7 +64,7 @@ class DataSetIsEqual extends Constraint
     protected function matches($other): bool
     {
         if (!$other instanceof IDataSet) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'PHPUnit_Extensions_Database_DataSet_IDataSet expected'
             );
         }

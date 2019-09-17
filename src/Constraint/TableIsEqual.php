@@ -64,7 +64,7 @@ class TableIsEqual extends Constraint
     protected function matches($other): bool
     {
         if (!$other instanceof ITable) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'PHPUnit_Extensions_Database_DataSet_ITable expected'
             );
         }
