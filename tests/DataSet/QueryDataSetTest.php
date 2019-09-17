@@ -95,6 +95,6 @@ class Extensions_Database_DataSet_QueryDataSetTest extends TestCase
 
     protected function getDataSet()
     {
-        return $this->createFlatXMLDataSet(__DIR__ . '/../_files/XmlDataSets/QueryDataSetTest.xml');
+        return $this->createArrayDataSet(include __DIR__ . '/../_files/ArrayDataSets/QueryDataSetTest.php');
     }
 }

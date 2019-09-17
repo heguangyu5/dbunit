@@ -28,9 +28,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param ITable $actual
      * @param string $message
      */
-    public static function assertTablesEqual(ITable $expected, ITable $actual, $message = ''): void
+    public static function assertTablesEqual(DataSet\ITable $expected, DataSet\ITable $actual, $message = ''): void
     {
-        $constraint = new TableIsEqual($expected);
+        $constraint = new Constraint\TableIsEqual($expected);
 
         self::assertThat($actual, $constraint, $message);
     }
@@ -42,9 +42,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param ITable $actual
      * @param string $message
      */
-    public static function assertDataSetsEqual(IDataSet $expected, IDataSet $actual, $message = ''): void
+    public static function assertDataSetsEqual(DataSet\IDataSet $expected, DataSet\IDataSet $actual, $message = ''): void
     {
-        $constraint = new DataSetIsEqual($expected);
+        $constraint = new Constraint\DataSetIsEqual($expected);
 
         self::assertThat($actual, $constraint, $message);
     }
@@ -90,7 +90,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     public function assertTableRowCount($tableName, $expected, $message = ''): void
     {
-        $constraint = new TableRowCount($tableName, $expected);
+        $constraint = new Constraint\TableRowCount($tableName, $expected);
         $actual     = $this->getConnection()->getRowCount($tableName);
 
         self::assertThat($actual, $constraint, $message);
@@ -103,7 +103,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param ITable $table       Table to look into
      * @param string $message     Optional message
      */
-    public function assertTableContains(array $expectedRow, ITable $table, $message = ''): void
+    public function assertTableContains(array $expectedRow, DataSet\ITable $table, $message = ''): void
     {
         self::assertThat($table->assertContainsRow($expectedRow), self::isTrue(), $message);
     }
@@ -113,7 +113,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @param Connection $connection
      */
-    protected function closeConnection(Connection $connection): void
+    protected function closeConnection(Database\Connection $connection): void
     {
         $this->getDatabaseTester()->closeConnection($connection);
     }
@@ -155,7 +155,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function getSetUpOperation()
     {
-        return Factory::CLEAN_INSERT();
+        return Operation\Factory::CLEAN_INSERT();
     }
 
     /**
@@ -165,7 +165,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function getTearDownOperation()
     {
-        return Factory::NONE();
+        return Operation\Factory::NONE();
     }
 
     /**
@@ -187,9 +187,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @return DefaultConnection
      */
-    protected function createDefaultDBConnection(PDO $connection, $schema = '')
+    protected function createDefaultDBConnection(\PDO $connection, $schema = '')
     {
-        return new DefaultConnection($connection, $schema);
+        return new Database\DefaultConnection($connection, $schema);
     }
 
     /**
@@ -212,17 +212,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function createArrayDataSet(array $data)
     {
-        return new ArrayDataSet($data);
-    }
-
-    /**
-     * Returns an operation factory instance that can be used to instantiate
-     * new operations.
-     *
-     * @return Factory
-     */
-    protected function getOperations()
-    {
-        return new Factory();
+        return new DataSet\ArrayDataSet($data);
     }
 }

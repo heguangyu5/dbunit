@@ -13,7 +13,6 @@ use PHPUnit\DbUnit\DataSet\CompositeDataSet;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use PHPUnit\DbUnit\DataSet\DefaultTable;
 use PHPUnit\DbUnit\DataSet\DefaultTableMetadata;
-use PHPUnit\DbUnit\DataSet\FlatXmlDataSet;
 use PHPUnit\DbUnit\Operation\Truncate;
 use PHPUnit\DbUnit\TestCase;
 
@@ -41,7 +40,7 @@ class Extensions_Database_Operation_OperationsMySQLTest extends TestCase
 
     public function getDataSet()
     {
-        return new FlatXmlDataSet(__DIR__ . '/../_files/XmlDataSets/OperationsMySQLTestFixture.xml');
+        return $this->createArrayDataSet(include __DIR__ . '/../_files/ArrayDataSets/OperationsMySQLTestFixture.php');
     }
 
     public function testTruncate(): void
@@ -77,7 +76,7 @@ class Extensions_Database_Operation_OperationsMySQLTest extends TestCase
     {
         $compositeDataset = new CompositeDataSet();
 
-        $dataset = $this->createXMLDataSet(__DIR__ . '/../_files/XmlDataSets/TruncateCompositeTest.xml');
+        $dataset = $this->createArrayDataSet(include __DIR__ . '/../_files/ArrayDataSets/TruncateCompositeTest.php');
         $compositeDataset->addDataSet($dataset);
 
         return $compositeDataset;
