@@ -10,8 +10,6 @@
 
 namespace PHPUnit\DbUnit\DataSet;
 
-use SimpleXMLElement;
-
 /**
  * Provides a basic functionality for dbunit tables
  */
@@ -118,16 +116,12 @@ class AbstractTable implements ITable
     public function getValue($row, $column)
     {
         if (isset($this->data[$row][$column])) {
-            $value = $this->data[$row][$column];
-
-            return ($value instanceof SimpleXMLElement) ? (string) $value : $value;
+            return $this->data[$row][$column];
         }
 
         if (!\in_array($column, $this->getTableMetaData()->getColumns()) || $this->getRowCount() <= $row) {
-            throw new InvalidArgumentException("The given row ({$row}) and column ({$column}) do not exist in table {$this->getTableMetaData()->getTableName()}");
+            throw new \InvalidArgumentException("The given row ({$row}) and column ({$column}) do not exist in table {$this->getTableMetaData()->getTableName()}");
         }
-
-        return;
     }
 
     /**
@@ -146,8 +140,6 @@ class AbstractTable implements ITable
         if ($this->getRowCount() <= $row) {
             throw new InvalidArgumentException("The given row ({$row}) does not exist in table {$this->getTableMetaData()->getTableName()}");
         }
-
-        return;
     }
 
     /**
@@ -177,12 +169,10 @@ class AbstractTable implements ITable
                 if (\is_numeric($thisValue) && \is_numeric($otherValue)) {
                     if ($thisValue != $otherValue) {
                         $this->other = $other;
-
                         return false;
                     }
                 } elseif ($thisValue !== $otherValue) {
                     $this->other = $other;
-
                     return false;
                 }
             }
@@ -201,18 +191,6 @@ class AbstractTable implements ITable
     public function assertContainsRow(array $row)
     {
         return \in_array($row, $this->data);
-    }
-
-    /**
-     * Sets the metadata for this table.
-     *
-     * @param ITableMetadata $tableMetaData
-     *
-     * @deprecated
-     */
-    protected function setTableMetaData(ITableMetadata $tableMetaData): void
-    {
-        $this->tableMetaData = $tableMetaData;
     }
 
     protected function rowToString(array $row)

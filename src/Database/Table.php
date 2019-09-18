@@ -27,7 +27,7 @@ class Table extends AbstractTable
      */
     public function __construct(ITableMetadata $tableMetaData, Connection $databaseConnection)
     {
-        $this->setTableMetaData($tableMetaData);
+        $this->tableMetaData = $tableMetaData;
 
         $pdoStatement = $databaseConnection->getConnection()->prepare(DataSet::buildTableSelect($tableMetaData, $databaseConnection));
         $pdoStatement->execute();

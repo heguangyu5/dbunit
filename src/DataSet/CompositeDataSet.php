@@ -44,7 +44,7 @@ class CompositeDataSet extends AbstractDataSet
      *
      * @param IDataSet $dataSet
      */
-    public function addDataSet(IDataSet $dataSet): void
+    public function addDataSet(IDataSet $dataSet)
     {
         foreach ($dataSet->getTableNames() as $tableName) {
             if (!\in_array($tableName, $this->getTableNames())) {

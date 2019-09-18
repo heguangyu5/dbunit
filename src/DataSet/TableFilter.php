@@ -31,7 +31,7 @@ class TableFilter extends AbstractTable
     public function __construct(ITable $originalTable, array $excludeColumns = [])
     {
         $this->originalTable = $originalTable;
-        $this->setTableMetaData(new TableMetadataFilter($originalTable->getTableMetaData()));
+        $this->tableMetaData = new TableMetadataFilter($originalTable->getTableMetaData());
         $this->addExcludeColumns($excludeColumns);
     }
 
@@ -73,7 +73,7 @@ class TableFilter extends AbstractTable
             return $this->originalTable->getValue($row, $column);
         }
 
-        throw new InvalidArgumentException("The given row ({$row}) and column ({$column}) do not exist in table {$this->getTableMetaData()->getTableName()}");
+        throw new \InvalidArgumentException("The given row ({$row}) and column ({$column}) do not exist in table {$this->getTableMetaData()->getTableName()}");
     }
 
     /**
@@ -81,7 +81,7 @@ class TableFilter extends AbstractTable
      *
      * @param array $includeColumns
      */
-    public function addIncludeColumns(array $includeColumns): void
+    public function addIncludeColumns(array $includeColumns)
     {
         $this->tableMetaData->addIncludeColumns($includeColumns);
     }
@@ -89,7 +89,7 @@ class TableFilter extends AbstractTable
     /**
      * Clears the included columns.
      */
-    public function clearIncludeColumns(): void
+    public function clearIncludeColumns()
     {
         $this->tableMetaData->clearIncludeColumns();
     }
@@ -99,7 +99,7 @@ class TableFilter extends AbstractTable
      *
      * @param array $excludeColumns
      */
-    public function addExcludeColumns(array $excludeColumns): void
+    public function addExcludeColumns(array $excludeColumns)
     {
         $this->tableMetaData->addExcludeColumns($excludeColumns);
     }
@@ -107,7 +107,7 @@ class TableFilter extends AbstractTable
     /**
      * Clears the included columns.
      */
-    public function clearExcludeColumns(): void
+    public function clearExcludeColumns()
     {
         $this->tableMetaData->clearExcludeColumns();
     }
@@ -129,7 +129,7 @@ class TableFilter extends AbstractTable
     /**
      * Loads data into local data table if it's not already loaded
      */
-    protected function loadData(): void
+    protected function loadData()
     {
         if ($this->data === null) {
             $data = [];

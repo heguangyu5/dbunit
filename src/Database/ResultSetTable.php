@@ -41,6 +41,6 @@ class ResultSetTable extends AbstractTable
             $columns = [];
         }
 
-        $this->setTableMetaData(new DefaultTableMetadata($tableName, $columns));
+        $this->tableMetadata = new DefaultTableMetadata($tableName, $columns);
     }
 }
