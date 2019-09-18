@@ -1,33 +1,38 @@
-[This extension is no longer maintained](https://github.com/sebastianbergmann/dbunit/issues/217)
-
 # DbUnit
 
 [PHPUnit](https://phpunit.de/) extension for database interaction testing.
 
 ## Installation
 
-### Composer
+put `src` folder in php include path, and rename it to `DbUnit`.
 
-If you use [Composer](https://getcomposer.org/) to manage the dependencies of your project then you can add DbUnit as a development-time dependency to your project:
+    include 'DbUnit/autoload.php';
 
-```
-$ composer require --dev phpunit/dbunit
-```
+    class MyTest extends PHPUnit\DbUnit\TestCase
+    {
+        protected static $connection;
 
-### PHP Archive (PHAR)
+        protected function getConnection()
+        {
+            if (!self::$connection) {
+                $pdo = new PDO('sqlite::memory:');
+                $pdo->exec('CREATE TABLE posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(200), content TEXT)');
+                self::$connection = $this->createDefaultDBConnection($pdo, 'sqlite');
+            }
+            return self::$connection;
+        }
 
-You can download a PHAR of DbUnit:
+        protected function getDataSet()
+        {
+            return $this->createArrayDataSet(array(
+                'posts' => array(
+                    array('id' => 1, 'title' => 'hello', 'content' => 'world')
+                )
+            ));
+        }
 
-```
-$ wget https://phar.phpunit.de/dbunit.phar
-```
-
-The example below shows how to configure PHPUnit to load all `*.phar` files found in a given directory (`tools/phpunit.d` in this example):
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.0/phpunit.xsd"
-         extensionsDirectory="tools/phpunit.d">
-</phpunit>
-```
+        public function testMyLogic()
+        {
+            $this->assertTableRowCount('posts', 1);
+        }
+    }
