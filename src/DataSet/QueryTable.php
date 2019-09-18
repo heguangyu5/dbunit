@@ -61,20 +61,6 @@ class QueryTable extends AbstractTable
     }
 
     /**
-     * Checks if a given row is in the table
-     *
-     * @param array $row
-     *
-     * @return bool
-     */
-    public function assertContainsRow(array $row)
-    {
-        $this->loadData();
-
-        return parent::assertContainsRow($row);
-    }
-
-    /**
      * Returns the number of rows in this table.
      *
      * @return int

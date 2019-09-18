@@ -37,25 +37,6 @@ class Extensions_Database_DataSet_AbstractTableTest extends TestCase
         ]);
     }
 
-    /**
-     * @param array $row
-     * @param bool  $exists
-     * @dataProvider providerTableContainsRow
-     */
-    public function testTableContainsRow($row, $exists): void
-    {
-        $result = $this->table->assertContainsRow($row);
-        $this->assertEquals($exists, $result);
-    }
-
-    public function providerTableContainsRow()
-    {
-        return [
-            [['id' => 1, 'column1' => 'randomValue'], true],
-            [['id' => 1, 'column1' => 'notExistingValue'], false]
-        ];
-    }
-
     public function testMatchesWithNonMatchingMetaData(): void
     {
         $tableMetaData = $this->createMock(ITableMetadata::class);

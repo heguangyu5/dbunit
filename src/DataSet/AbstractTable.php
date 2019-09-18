@@ -181,18 +181,6 @@ class AbstractTable implements ITable
         return true;
     }
 
-    /**
-     * Checks if a given row is in the table
-     *
-     * @param array $row
-     *
-     * @return bool
-     */
-    public function assertContainsRow(array $row)
-    {
-        return \in_array($row, $this->data);
-    }
-
     protected function rowToString(array $row)
     {
         $rowString = '';

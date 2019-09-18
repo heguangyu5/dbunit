@@ -126,11 +126,4 @@ class Extensions_Database_DataSet_QueryTableTest extends TestCase
         $expected_table->addRow(['col1' => 'value7', 'col2' => 'value8', 'col3' => 'value9']);
         $this->assertFalse($this->table->matches($expected_table));
     }
-
-    public function testAssertRowContains(): void
-    {
-        $this->assertTrue($this->table->assertContainsRow(
-            ['col1' => 'value1', 'col2' => 'value2', 'col3' => 'value3']
-        ));
-    }
 }

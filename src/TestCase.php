@@ -48,11 +48,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         self::assertThat($actual, $constraint, $message);
     }
 
-    public function assertTableContains(array $expectedRow, DataSet\ITable $table, $message = '')
-    {
-        self::assertThat($table->assertContainsRow($expectedRow), self::isTrue(), $message);
-    }
-
     public function assertTableEmpty()
     {
         $tables = func_get_args();

@@ -113,20 +113,6 @@ class TableFilter extends AbstractTable
     }
 
     /**
-     * Checks if a given row is in the table
-     *
-     * @param array $row
-     *
-     * @return bool
-     */
-    public function assertContainsRow(array $row)
-    {
-        $this->loadData();
-
-        return parent::assertContainsRow($row);
-    }
-
-    /**
      * Loads data into local data table if it's not already loaded
      */
     protected function loadData()
