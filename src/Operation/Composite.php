@@ -37,7 +37,7 @@ class Composite implements Operation
             if ($operation instanceof Operation) {
                 $this->operations[] = $operation;
             } else {
-                throw new InvalidArgumentException('Only database operation instances can be passed to a composite database operation.');
+                throw new \InvalidArgumentException('Only database operation instances can be passed to a composite database operation.');
             }
         }
     }

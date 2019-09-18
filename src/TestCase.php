@@ -18,12 +18,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function getSetUpOperation()
     {
-        return Operation\Factory::CLEAN_INSERT();
+        return new Operation\Composite(array(
+            new Operation\Truncate(),
+            new Operation\Insert()
+        ));
     }
 
     protected function getTearDownOperation()
     {
-        return Operation\Factory::NONE();
+        return new Operation\None();
     }
 
     public static function assertTablesEqual(DataSet\ITable $expected, DataSet\ITable $actual, $message = '')
