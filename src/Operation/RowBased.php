@@ -32,6 +32,13 @@ abstract class RowBased implements Operation
 
     protected $iteratorDirection = self::ITERATOR_TYPE_FORWARD;
 
+    protected $useTransaction;
+
+    public function __construct($transaction = true)
+    {
+        $this->useTransaction = $transaction;
+    }
+
     /**
      * @param Connection $connection
      * @param IDataSet   $dataSet
@@ -42,51 +49,52 @@ abstract class RowBased implements Operation
 
         $dsIterator = $this->iteratorDirection == self::ITERATOR_TYPE_REVERSE ? $dataSet->getReverseIterator() : $dataSet->getIterator();
 
-        foreach ($dsIterator as $table) {
-            $rowCount = $table->getRowCount();
-
-            if ($rowCount == 0) {
-                continue;
-            }
-
-            /* @var $table ITable */
-            $databaseTableMetaData = $databaseDataSet->getTableMetaData($table->getTableMetaData()->getTableName());
-            $query                 = $this->buildOperationQuery($databaseTableMetaData, $table, $connection);
-            $disablePrimaryKeys    = $this->disablePrimaryKeys($databaseTableMetaData, $table, $connection);
-
-            if ($query === false) {
-                if ($table->getRowCount() > 0) {
-                    throw new Exception($this->operationName, '', [], $table, 'Rows requested for insert, but no columns provided!');
+        $pdo = $connection->getConnection();
+        if ($this->useTransaction) {
+            $pdo->beginTransaction();
+        }
+        try {
+            foreach ($dsIterator as $table) {
+                $rowCount = $table->getRowCount();
+                if ($rowCount == 0) {
+                    continue;
                 }
 
-                continue;
-            }
+                $databaseTableMetaData = $databaseDataSet->getTableMetaData($table->getTableMetaData()->getTableName());
+                $query = $this->buildOperationQuery($databaseTableMetaData, $table, $connection);
+                if ($query === false) {
+                    if ($table->getRowCount() > 0) {
+                        throw new Exception($this->operationName, '', [], $table, 'Rows requested for insert, but no columns provided!');
+                    }
+                    continue;
+                }
 
-            if ($disablePrimaryKeys) {
-                $connection->disablePrimaryKeys($databaseTableMetaData->getTableName());
-            }
+                $disablePrimaryKeys = $this->disablePrimaryKeys($databaseTableMetaData, $table, $connection);
+                if ($disablePrimaryKeys) {
+                    $connection->disablePrimaryKeys($databaseTableMetaData->getTableName());
+                }
 
-            $statement = $connection->getConnection()->prepare($query);
-
-            for ($i = 0; $i < $rowCount; $i++) {
-                $args = $this->buildOperationArguments($databaseTableMetaData, $table, $i);
-
-                try {
-                    $statement->execute($args);
-                } catch (\Exception $e) {
-                    throw new Exception(
-                        $this->operationName,
-                        $query,
-                        $args,
-                        $table,
-                        $e->getMessage()
-                    );
+                $statement = $pdo->prepare($query);
+                for ($i = 0; $i < $rowCount; $i++) {
+                    $args = $this->buildOperationArguments($databaseTableMetaData, $table, $i);
+                    try {
+                        $statement->execute($args);
+                    } catch (\Exception $e) {
+                        throw new Exception($this->operationName, $query, $args, $table, $e->getMessage());
+                    }
+                }
+                if ($disablePrimaryKeys) {
+                    $connection->enablePrimaryKeys($databaseTableMetaData->getTableName());
                 }
             }
-
-            if ($disablePrimaryKeys) {
-                $connection->enablePrimaryKeys($databaseTableMetaData->getTableName());
+            if ($this->useTransaction) {
+                $pdo->commit();
             }
+        } catch (\Exception $e) {
+            if ($this->useTransaction) {
+                $pdo->rollBack();
+            }
+            throw $e;
         }
     }
 

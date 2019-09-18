@@ -20,20 +20,32 @@ use PHPUnit\DbUnit\DataSet\ITable;
  */
 class DeleteAll implements Operation
 {
-    public function execute(Connection $connection, IDataSet $dataSet): void
+    protected $useTransaction;
+
+    public function __construct($transaction = true)
     {
-        foreach ($dataSet->getReverseIterator() as $table) {
-            /* @var $table ITable */
+        $this->useTransaction = $transaction;
+    }
 
-            $query = "
-                DELETE FROM {$connection->quoteSchemaObject($table->getTableMetaData()->getTableName())}
-            ";
-
-            try {
-                $connection->getConnection()->query($query);
-            } catch (PDOException $e) {
-                throw new Exception('DELETE_ALL', $query, [], $table, $e->getMessage());
+    public function execute(Connection $connection, IDataSet $dataSet)
+    {
+        $pdo = $connection->getConnection();
+        if ($this->useTransaction) {
+            $pdo->beginTransaction();
+        }
+        try {
+            foreach ($dataSet->getReverseIterator() as $table) {
+                $sql = 'DELETE FROM ' . $connection->quoteSchemaObject($table->getTableMetaData()->getTableName());
+                $pdo->exec($sql);
             }
+            if ($this->useTransaction) {
+                $pdo->commit();
+            }
+        } catch (PDOException $e) {
+            if ($this->useTransaction) {
+                $pdo->rollBack();
+            }
+            throw new Exception('DELETE_ALL', $sql, [], $table, $e->getMessage());
         }
     }
 }

@@ -21,58 +21,63 @@ use PHPUnit\DbUnit\DataSet\ITable;
  */
 class Truncate implements Operation
 {
-    protected $useCascade = false;
+    protected $useTransaction;
+    protected $useCascade;
 
-    public function setCascade($cascade = true): void
+    public function __construct($transaction = true, $cascade = false)
     {
-        $this->useCascade = $cascade;
+        $this->useTransaction = $transaction;
+        $this->useCascade     = $cascade;
     }
 
-    public function execute(Connection $connection, IDataSet $dataSet): void
+    public function execute(Connection $connection, IDataSet $dataSet)
     {
-        foreach ($dataSet->getReverseIterator() as $table) {
-            /* @var $table ITable */
-            $query = "
-                {$connection->getTruncateCommand()} {$connection->quoteSchemaObject($table->getTableMetaData()->getTableName())}
-            ";
+        $pdo = $connection->getConnection();
+        $pdoMysql = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME) == 'mysql';
+        if ($pdoMysql) {
+            $this->disableForeignKeyChecksForMysql($pdo);
+        }
 
-            if ($this->useCascade && $connection->allowsCascading()) {
-                $query .= ' CASCADE';
-            }
-
-            try {
-                $this->disableForeignKeyChecksForMysql($connection);
-                $connection->getConnection()->query($query);
-                $this->enableForeignKeyChecksForMysql($connection);
-            } catch (\Exception $e) {
-                $this->enableForeignKeyChecksForMysql($connection);
-
-                if ($e instanceof PDOException) {
-                    throw new Exception('TRUNCATE', $query, [], $table, $e->getMessage());
+        if ($this->useTransaction) {
+            $pdo->beginTransaction();
+        }
+        try {
+            foreach ($dataSet->getReverseIterator() as $table) {
+                $sql = $connection->getTruncateCommand() . ' ' . $connection->quoteSchemaObject($table->getTableMetaData()->getTableName());
+                if ($this->useCascade && $connection->allowsCascading()) {
+                    $sql .= ' CASCADE';
                 }
-
-                throw $e;
+                $pdo->exec($sql);
             }
+            if ($this->useTransaction) {
+                $pdo->commit();
+            }
+        } catch (\Exception $e) {
+            if ($this->useTransaction) {
+                $pdo->rollBack();
+            }
+            if ($pdoMysql) {
+                $this->enableForeignKeyChecksForMysql($pdo);
+            }
+            if ($e instanceof PDOException) {
+                throw new Exception('TRUNCATE', $sql, [], $table, $e->getMessage());
+            }
+            throw $e;
+        }
+
+        if ($pdoMysql) {
+            $this->enableForeignKeyChecksForMysql($pdo);
         }
     }
 
-    private function disableForeignKeyChecksForMysql(Connection $connection): void
+    private function disableForeignKeyChecksForMysql(PDO $pdo)
     {
-        if ($this->isMysql($connection)) {
-            $connection->getConnection()->query('SET @PHPUNIT_OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS');
-            $connection->getConnection()->query('SET FOREIGN_KEY_CHECKS = 0');
-        }
+        $pdo->exec('SET @PHPUNIT_OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS');
+        $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
     }
 
-    private function enableForeignKeyChecksForMysql(Connection $connection): void
+    private function enableForeignKeyChecksForMysql(PDO $pdo)
     {
-        if ($this->isMysql($connection)) {
-            $connection->getConnection()->query('SET FOREIGN_KEY_CHECKS=@PHPUNIT_OLD_FOREIGN_KEY_CHECKS');
-        }
-    }
-
-    private function isMysql(Connection $connection)
-    {
-        return $connection->getConnection()->getAttribute(PDO::ATTR_DRIVER_NAME) == 'mysql';
+        $pdo->exec('SET FOREIGN_KEY_CHECKS=@PHPUNIT_OLD_FOREIGN_KEY_CHECKS');
     }
 }

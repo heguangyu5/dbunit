@@ -63,7 +63,7 @@ class Extensions_Database_Operation_RowBasedTest extends TestCase
         return new DefaultDataSet($tables);
     }
 
-    public function testExecute(): void
+    public function testExecute()
     {
         $connection = $this->getConnection();
         /* @var $connection DefaultConnection */
@@ -153,7 +153,7 @@ class Extensions_Database_Operation_RowBasedTest extends TestCase
         );
     }
 
-    public function testExecuteWithBadQuery(): void
+    public function testExecuteWithBadQuery()
     {
         $mockDatabaseDataSet = $this->createMock(DefaultDataSet::class);
         $mockDatabaseDataSet->expects($this->never())->method('getTableMetaData');
@@ -161,7 +161,7 @@ class Extensions_Database_Operation_RowBasedTest extends TestCase
         $mockConnection = $this->createMock(Connection::class);
         $mockConnection->expects($this->once())->method('createDataSet')->will($this->returnValue($mockDatabaseDataSet));
 
-        foreach (['getConnection', 'disablePrimaryKeys', 'enablePrimaryKeys'] as $method) {
+        foreach (['disablePrimaryKeys', 'enablePrimaryKeys'] as $method) {
             $mockConnection->expects($this->never())->method($method);
         }
 
@@ -184,7 +184,7 @@ class Extensions_Database_Operation_RowBasedTest extends TestCase
         $mockOperation->execute($mockConnection, $mockDataSet);
     }
 
-    public function testExecuteHandlesException(): void
+    public function testExecuteHandlesException()
     {
         $this->expectException(OperationException::class);
 
