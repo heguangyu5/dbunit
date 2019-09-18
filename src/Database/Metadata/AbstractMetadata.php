@@ -122,16 +122,6 @@ abstract class AbstractMetadata implements Metadata
     }
 
     /**
-     * Returns the schema for the connection.
-     *
-     * @return string
-     */
-    public function getSchema()
-    {
-        return $this->schema;
-    }
-
-    /**
      * Returns a quoted schema object. (table name, column name, etc)
      *
      * @param string $object

@@ -43,13 +43,6 @@ interface Metadata
     public function getTablePrimaryKeys($tableName);
 
     /**
-     * Returns the name of the default schema.
-     *
-     * @return string
-     */
-    public function getSchema();
-
-    /**
      * Returns a quoted schema object. (table name, column name, etc)
      *
      * @param string $object

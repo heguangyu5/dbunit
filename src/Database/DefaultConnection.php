@@ -49,7 +49,7 @@ class DefaultConnection implements Connection
     /**
      * Close this connection.
      */
-    public function close(): void
+    public function close()
     {
         unset($this->connection, $this->metaData);
     }
@@ -63,16 +63,6 @@ class DefaultConnection implements Connection
     public function getMetaData()
     {
         return $this->metaData;
-    }
-
-    /**
-     * Returns the schema for the connection.
-     *
-     * @return string
-     */
-    public function getSchema()
-    {
-        return $this->getMetaData()->getSchema();
     }
 
     /**
@@ -106,13 +96,6 @@ class DefaultConnection implements Connection
     public function createQueryTable($resultName, $sql)
     {
         return new QueryTable($resultName, $sql, $this);
-    }
-
-    /**
-     * Returns this connection database configuration
-     */
-    public function getConfig(): void
-    {
     }
 
     /**
@@ -182,7 +165,7 @@ class DefaultConnection implements Connection
      *
      * @param string $tableName
      */
-    public function disablePrimaryKeys($tableName): void
+    public function disablePrimaryKeys($tableName)
     {
         $this->getMetaData()->disablePrimaryKeys($tableName);
     }
@@ -192,7 +175,7 @@ class DefaultConnection implements Connection
      *
      * @param string $tableName
      */
-    public function enablePrimaryKeys($tableName): void
+    public function enablePrimaryKeys($tableName)
     {
         $this->getMetaData()->enablePrimaryKeys($tableName);
     }

@@ -72,13 +72,6 @@ interface Connection
     public function getRowCount($tableName, $whereClause = null);
 
     /**
-     * Returns the schema for the connection.
-     *
-     * @return string
-     */
-    public function getSchema();
-
-    /**
      * Returns a quoted schema object. (table name, column name, etc)
      *
      * @param string $object
