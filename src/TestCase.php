@@ -53,6 +53,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         self::assertThat($table->assertContainsRow($expectedRow), self::isTrue(), $message);
     }
 
+    public function assertTableEmpty()
+    {
+        $tables = func_get_args();
+        foreach ($tables as $table) {
+            $this->assertTableRowCount($table, 0);
+        }
+    }
+
     protected function createDefaultDBConnection(\PDO $connection, $schema = '')
     {
         return new Database\DefaultConnection($connection, $schema);

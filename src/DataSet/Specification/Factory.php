@@ -25,18 +25,6 @@ class Factory implements IFactory
     public function getDataSetSpecByType($type)
     {
         switch ($type) {
-            case 'xml':
-                return new Xml();
-
-            case 'flatxml':
-                return new FlatXml();
-
-            case 'csv':
-                return new Csv();
-
-            case 'yaml':
-                return new Yaml();
-
             case 'dbtable':
                 return new Table();
 

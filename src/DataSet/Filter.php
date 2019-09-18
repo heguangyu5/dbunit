@@ -54,31 +54,11 @@ class Filter extends AbstractDataSet
     /**
      * Creates a new filtered data set.
      *
-     * The $exclude tables should be an associative array using table names as
-     * the key and an array of column names to exclude for the value. If you
-     * would like to exclude a full table set the value of the table's entry
-     * to the special string '*'.
-     *
      * @param IDataSet $originalDataSet
-     * @param array    $excludeTables   @deprecated use set* methods instead
      */
-    public function __construct(IDataSet $originalDataSet, array $excludeTables = [])
+    public function __construct(IDataSet $originalDataSet)
     {
         $this->originalDataSet = $originalDataSet;
-
-        $tables = [];
-
-        foreach ($excludeTables as $tableName => $values) {
-            if (\is_array($values)) {
-                $this->setExcludeColumnsForTable($tableName, $values);
-            } elseif ($values == '*') {
-                $tables[] = $tableName;
-            } else {
-                $this->setExcludeColumnsForTable($tableName, (array) $values);
-            }
-        }
-
-        $this->addExcludeTables($tables);
     }
 
     /**
