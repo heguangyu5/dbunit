@@ -79,7 +79,7 @@ abstract class AbstractDataSet implements IDataSet
      *
      * @return ITableIterator
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return $this->createIterator();
     }
